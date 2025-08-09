@@ -177,11 +177,95 @@
 
     small{display:block;color:var(--muted); margin-top:8px}
 
-    /* accessibility & small screens */
+    /* accessibility & small screens (existing) */
     @media(max-width:560px){
       .hero-body{padding:20px}
       .brand p{display:none}
       .hero-title{font-size:18px}
+    }
+
+    /* ===== Mobile optimization additions (ADDED - non-destructive) ===== */
+
+    /* Tablet / small desktop -> stack and reduce padding */
+    @media (max-width: 768px) {
+      /* Reduce container padding */
+      .container {
+        padding: 32px 16px;
+      }
+
+      /* Header tweaks: allow wrapping so brand + nav don't squeeze */
+      header {
+        flex-wrap: wrap;
+        padding: 14px 16px;
+      }
+      /* make the pill links wrap in the header nav */
+      nav[aria-label="Main actions"] {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* Hero: stack content vertically on narrower widths */
+      .hero-body {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+      }
+      .hero-body .left {
+        max-width: 100%;
+      }
+      /* right-side stat becomes natural width */
+      .hero-body > div:last-child {
+        min-width: unset;
+        text-align: center;
+      }
+
+      /* About split -> single column */
+      .split {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      /* CTA: stack actions */
+      .cta {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+        align-items: center;
+      }
+      .cta-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      /* headings should wrap gracefully */
+      h1, h2, h3 {
+        word-wrap: break-word;
+      }
+    }
+
+    /* Phones: tighter spacing, text scaling and single-column grids */
+    @media (max-width: 560px) {
+      /* keep the existing small-screen rules but expand them safely */
+      .hero-body{padding:20px}
+      .brand p{display:none}
+      .hero-title{font-size:16px}
+      .brand h1{font-size:0.95rem}
+      .hero-sub{font-size:13px}
+
+      /* Reduce padding on small cards to keep things compact */
+      .card, .tile, .counter-card, .story, .gimg {
+        padding: 14px;
+      }
+
+      /* Force single-column for these dense grids */
+      .tiles, .impact-grid, .stories-grid, .gallery {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* Modal tweak */
+      .modal-card {
+        padding: 14px;
+      }
     }
 
   </style>
