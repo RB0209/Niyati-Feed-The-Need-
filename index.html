@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NIYATI — Feed The Need</title>
+
+  <style>
+    :root{
+      --accent:#38b6ff;
+      --bg:#f7fbff;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --radius:14px;
+      --ease:cubic-bezier(.2,.9,.3,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.55;
+      overflow-x:hidden;
+    }
+
+    a{color:var(--accent); text-decoration:none}
+    .container{max-width:1100px; margin:0 auto; padding:48px 24px;}
+
+    /* header (small) */
+    header{
+      display:flex; align-items:center; gap:20px;
+      padding:18px 24px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+      position:sticky; top:0; z-index:60; backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(10,20,30,0.03);
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:48px; height:48px; border-radius:10px; overflow:hidden; flex:0 0 48px;
+      box-shadow:0 6px 18px rgba(56,182,255,0.15);
+    }
+    .brand h1{font-size:1rem;margin:0;color:var(--accent); letter-spacing:0.2px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    /* HERO (small) */
+    .hero{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      align-items:center;
+      margin-top:18px;
+    }
+    .hero-card{
+      position:relative; border-radius:12px; overflow:hidden;
+      min-height:180px; /* small height */
+      background:#e6f6ff;
+      box-shadow:0 12px 40px rgba(18,52,85,0.06);
+      transition:transform .45s var(--ease), box-shadow .45s var(--ease);
+    }
+    .hero-card:hover{ transform:translateY(-6px); box-shadow:0 20px 50px rgba(18,52,85,0.10) }
+
+    .hero-img{
+      position:absolute; inset:0; background-size:cover; background-position:center;
+      transform:scale(1.05);
+      transition:transform 1.2s var(--ease);
+      will-change:transform;
+    }
+    .hero-card:hover .hero-img{ transform:scale(1.12) translateY(-6px) }
+
+    .hero-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,18,35,0.12), rgba(6,18,35,0.06)); }
+
+    .hero-body{position:relative; padding:28px; display:flex; gap:20px; align-items:center}
+    .hero-body .left{flex:1; max-width:820px}
+    .tag{display:inline-block; padding:6px 10px; background:rgba(255,255,255,0.85); border-radius:999px; font-weight:600; color:var(--accent); font-size:13px; margin-bottom:8px}
+    .hero-title{font-size:22px;margin:0 0 8px 0; color:#052235}
+    .hero-sub{margin:0;color:var(--muted); font-size:14px}
+    .cta-inline{margin-top:12px; display:inline-flex; align-items:center; gap:10px; color:var(--accent); font-weight:600;}
+
+    /* two-column about */
+    .split{display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:stretch; margin-top:36px}
+    @media (max-width:900px){ .split{grid-template-columns:1fr;}}
+    .card{
+      background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:0 8px 30px rgba(2,6,23,0.04);
+      transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+    }
+    .card:hover{ transform:translateY(-8px); box-shadow:0 28px 60px rgba(2,6,23,0.07) }
+    .about-text h2{margin:0 0 10px 0; color:#073047}
+    .about-text p{color:#334155; margin:10px 0; white-space:pre-line}
+
+    .about-img{
+      height:100%; border-radius:10px; overflow:hidden; min-height:260px;
+      display:block; background-size:cover; background-position:center;
+    }
+
+    /* mission/vision tiles */
+    .tiles{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:28px}
+    @media(max-width:800px){ .tiles{grid-template-columns:1fr}}
+    .tile{
+      position:relative; overflow:hidden; border-radius:12px; padding:26px;
+      min-height:150px; background:linear-gradient(180deg,#fff 0%, #fbfdff 100%);
+      transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+      border:1px solid rgba(6,15,30,0.04);
+    }
+    .tile:hover{ transform: translateY(-8px) scale(1.01); box-shadow:0 30px 60px rgba(6,24,40,0.06) }
+    .tile .icon{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2aa0ff); display:flex;align-items:center;justify-content:center;color:white;font-weight:700;margin-bottom:12px}
+    .tile h3{margin:0 0 6px 0}
+    .tile p{margin:0;color:var(--muted)}
+
+    /* impact counters grid */
+    .impact-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-top:28px}
+    .counter-card{
+      background:linear-gradient(180deg,#fff,#fbfdff); border-radius:12px; padding:22px; text-align:center;
+      box-shadow:0 18px 40px rgba(2,6,23,0.04); transition: transform .35s var(--ease);
+      border:1px solid rgba(6,15,30,0.03);
+    }
+    .counter-card:hover{ transform:translateY(-8px) scale(1.02) }
+    .count{font-size:28px;color:var(--accent); font-weight:800}
+    .count-label{margin-top:8px;color:var(--muted); font-size:14px}
+
+    /* volunteer tiles grid (Disney style) */
+    .stories-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:28px}
+    .story{
+      position:relative; overflow:hidden; border-radius:12px; min-height:260px; cursor:pointer;
+      background:#fff; box-shadow:0 12px 36px rgba(2,6,23,0.04); transition:transform .5s var(--ease), box-shadow .5s var(--ease);
+      transform:translateY(0);
+    }
+    .story:hover{ transform:translateY(-10px) scale(1.02); box-shadow:0 38px 80px rgba(2,6,23,0.09) }
+    .story-img{ position:absolute; inset:0; background-size:cover; background-position:center; transform:scale(1.06); transition: transform 1s var(--ease) }
+    .story:hover .story-img{ transform:scale(1.12) }
+    .story-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(2,6,23,0.0), rgba(2,6,23,0.48)); opacity:0; transition:opacity .45s var(--ease) }
+    .story:hover .story-overlay{ opacity:1 }
+    .story-content{ position:absolute; left:16px; bottom:18px; color:white; z-index:5; transform:translateY(12px); opacity:0; transition: all .45s var(--ease) }
+    .story:hover .story-content{ transform:translateY(0); opacity:1 }
+    .story-content h4{ margin:0 0 6px 0; font-size:18px }
+    .story-content p{ margin:0; font-size:13px; color:rgba(255,255,255,0.90) }
+
+    /* gallery */
+    .gallery{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:28px }
+    .gimg{ position:relative; overflow:hidden; border-radius:10px; min-height:120px; background:#eee; cursor:pointer; transition:transform .45s var(--ease), box-shadow .45s var(--ease) }
+    .gimg img{ width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.03); transition:transform 0.9s var(--ease) }
+    .gimg:hover img{ transform:scale(1.14) rotate(-0.7deg) }
+    .gimg:hover{ transform:translateY(-8px); box-shadow:0 28px 60px rgba(2,6,23,0.06) }
+
+    /* CTA */
+    .cta{
+      margin-top:34px; padding:22px; border-radius:12px; background:linear-gradient(90deg, rgba(56,182,255,0.06), rgba(56,182,255,0.02));
+      display:flex; align-items:center; gap:18px; justify-content:space-between;
+    }
+    .cta-left h3{margin:0;color:#052235}
+    .cta-left p{margin:4px 0 0;color:var(--muted)}
+    .cta-actions{display:flex;gap:12px; align-items:center}
+    .pill{
+      padding:10px 14px; border-radius:999px; border:1px solid rgba(56,182,255,0.14); background:white; font-weight:700; color:var(--accent);
+      cursor:pointer; transition:transform .25s var(--ease);
+    }
+    .pill:hover{ transform:translateY(-4px) }
+
+    /* modal (lightbox for stories) */
+    .modal{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:999;
+      background:linear-gradient(rgba(2,6,23,0.6), rgba(2,6,23,0.65));
+      padding:28px;
+    }
+    .modal.show{ display:flex }
+    .modal-card{ width:100%; max-width:860px; background:var(--card); border-radius:12px; padding:22px; position:relative; box-shadow:0 30px 80px rgba(2,6,23,0.4) }
+    .modal-close{ position:absolute; right:14px; top:14px; background:transparent; border:0; font-size:18px; cursor:pointer; color:var(--muted) }
+    .modal-grid{ display:grid; grid-template-columns:1fr 340px; gap:18px }
+    @media(max-width:900px){ .modal-grid{ grid-template-columns:1fr } }
+
+    /* reveal animations */
+    .reveal{opacity:0; transform:translateY(18px); transition:all .75s var(--ease) }
+    .reveal.visible{ opacity:1; transform:translateY(0) }
+
+    small{display:block;color:var(--muted); margin-top:8px}
+
+    /* accessibility & small screens */
+    @media(max-width:560px){
+      .hero-body{padding:20px}
+      .brand p{display:none}
+      .hero-title{font-size:18px}
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- header -->
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:0;">
+      <div class="brand" aria-hidden="false">
+        <div class="logo" style="background-image:url('images/IMG_20210311_125804 (1).jpg'); background-size:cover; background-position:center;"></div>
+        <div>
+          <h1>NIYATI — Feed The Need</h1>
+          <p>CARE Foundation • Since 2020</p>
+        </div>
+      </div>
+      <nav aria-label="Main actions" style="display:flex;gap:12px;align-items:center">
+        <a class="pill" href="#impact">Impact</a>
+        <a class="pill" href="#stories">Volunteer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+
+    <!-- HERO (small) -->
+    <section class="hero reveal" id="top">
+      <div class="hero-card card">
+        <div class="hero-img" style="background-image:url('images/IMG_20210311_122529.jpg');"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-body">
+          <div class="left">
+            <span class="tag">Humanitarian Initiative</span>
+            <h2 class="hero-title">NIYATI — Feed The Need</h2>
+            <p class="hero-sub">Fighting hunger and restoring hope — rapid emergency response turned into a long-term mission rooted in dignity, consistency & community care.</p>
+            <div class="cta-inline">
+              <span style="font-size:13px;color:var(--muted)">Donate • Volunteer • Sponsor a Kit</span>
+            </div>
+          </div>
+          <div style="min-width:220px; text-align:right">
+            <div style="font-weight:800;font-size:26px;color:var(--accent)">10,000+</div>
+            <small style="color:var(--muted)">Individuals & families reached (2020–2025)</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="reveal about-section" id="about" aria-labelledby="about-title">
+      <div class="split">
+        <div class="card about-text">
+          <h2 id="about-title">About the Project</h2>
+          <p>
+In 2020, as the COVID-19 pandemic disrupted lives across the globe, the CARE Foundation launched Niyati – Feed the Need,
+
+A humanitarian initiative to combat hunger and support vulnerable communities. Born from compassion during one of history’s greatest crises, Niyati addressed urgent needs—from food insecurity to the sudden loss of income and basic essentials. What began as a rapid emergency response quickly transformed into a long-term mission rooted in dignity, consistency, and community care. From 2020 to 2025,
+
+Niyati has reached over 10,000 individuals and families, delivering food kits, essential supplies, and most importantly, hope. This initiative became more than just numbers—it became a symbol of trust, resilience, and shared humanity.
+
+Even today, Niyati – Feed the Need continues to grow, evolving into a movement that envisions a hunger-free future. Every ration kit delivered is a step closer to a world where no one sleeps hungry.
+          </p>
+          <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <button class="pill" onclick="scrollToSection('impact')">See Impact</button>
+            <button class="pill" onclick="openDonatePrompt()">How to Help</button>
+          </div>
+        </div>
+
+        <div class="card" style="display:flex;align-items:center;justify-content:center;padding:0;">
+          <div class="about-img" style="background-image:url('images/IMG_20210311_125257_edited.jpg');"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="reveal" id="mission">
+      <h2 style="text-align:center">Mission & Vision</h2>
+      <div class="tiles">
+        <div class="tile card">
+          <div class="icon">M</div>
+          <h3>Mission</h3>
+          <p>Deliver consistent food assistance & dignity-driven outreach to vulnerable families. Build systems that prevent recurring hunger.</p>
+        </div>
+        <div class="tile card">
+          <div class="icon">V</div>
+          <h3>Vision</h3>
+          <p>To create resilient communities where access to basic nutrition and essential resources is guaranteed for all.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact counters -->
+    <section id="impact" class="reveal">
+      <h2 style="text-align:center">Impact At A Glance</h2>
+      <div class="impact-grid" style="margin-top:18px">
+        <div class="counter-card">
+          <div class="count" data-target="10000">0</div>
+          <div class="count-label">Individuals & Families Reached</div>
+        </div>
+        <div class="counter-card">
+          <div class="count" data-target="5">0</div>
+          <div class="count-label">Years of Ongoing Support</div>
+        </div>
+        <div class="counter-card">
+          <div class="count" data-target="120">0</div>
+          <div class="count-label">Distribution Drives</div>
+        </div>
+        <div class="counter-card">
+          <div class="count" data-target="500">0</div>
+          <div class="count-label">Active Volunteers</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Volunteer Stories -->
+    <section id="stories" class="reveal">
+      <h2 style="text-align:center">Volunteer Stories</h2>
+      <div class="stories-grid" style="margin-top:18px">
+        <div class="story" tabindex="0" onclick="openStory(0)">
+          <div class="story-img" style="background-image:url('images/IMG_20210311_125804 (1).jpg');"></div>
+          <div class="story-overlay"></div>
+          <div class="story-content">
+            <h4>Priya — Community Lead</h4>
+            <p>"Joining the team changed my perspective on service."</p>
+          </div>
+        </div>
+
+        <div class="story" tabindex="0" onclick="openStory(1)">
+          <div class="story-img" style="background-image:url('images/IMG_20210311_122529.jpg');"></div>
+          <div class="story-overlay"></div>
+          <div class="story-content">
+            <h4>Rahul — Volunteer</h4>
+            <p>"Every distribution brings hope — seeing smiles is priceless."</p>
+          </div>
+        </div>
+
+        <div class="story" tabindex="0" onclick="openStory(2)">
+          <div class="story-img" style="background-image:url('images/IMG_20210311_125257_edited.jpg');"></div>
+          <div class="story-overlay"></div>
+          <div class="story-content">
+            <h4>Sunita — Coordinator</h4>
+            <p>"We focus on dignity while delivering essentials."</p>
+          </div>
+        </div>
+
+        <div class="story" tabindex="0" onclick="openStory(3)">
+          <div class="story-img" style="background-image:url('images/IMG_20220131_163957.jpg');"></div>
+          <div class="story-overlay"></div>
+          <div class="story-content">
+            <h4>Ramesh — Logistics</h4>
+            <p>"Challenges are many, but the community stands together."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="reveal">
+      <h2 style="text-align:center">Photo Gallery</h2>
+      <div class="gallery" style="margin-top:16px">
+        <div class="gimg" onclick="openLightbox('images/IMG_20210311_125804 (1).jpg')">
+          <img src="images/IMG_20210311_125804 (1).jpg" alt="distribution" />
+        </div>
+        <div class="gimg" onclick="openLightbox('images/IMG_20210311_122529.jpg')">
+          <img src="images/IMG_20210311_122529.jpg" alt="education" />
+        </div>
+        <div class="gimg" onclick="openLightbox('images/IMG_20210311_125257_edited.jpg')">
+          <img src="images/IMG_20210311_125257_edited.jpg" alt="health camp" />
+        </div>
+        <div class="gimg" onclick="openLightbox('images/IMG_20220131_163957.jpg')">
+          <img src="images/IMG_20220131_163957.jpg" alt="volunteers" />
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / How You Can Help -->
+    <section id="help" class="reveal">
+      <div class="card cta">
+        <div class="cta-left">
+          <h3>How you can help</h3>
+          <p>Donations, sponsoring ration kits, or volunteering your time — every action moves us closer to a hunger-free community.</p>
+        </div>
+        <div class="cta-actions" aria-hidden="false">
+          <button class="pill" onclick="donateKit()">Sponsor a Kit</button>
+          <button class="pill" onclick="openDonatePrompt()">Donate Now</button>
+          <button class="pill" onclick="volunteerForm()">Volunteer</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Story modal -->
+  <div id="storyModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" aria-label="Close" onclick="closeStory()">✕</button>
+      <div class="modal-grid">
+        <div id="modalImg" style="border-radius:10px; background-size:cover; background-position:center; min-height:320px"></div>
+        <div style="padding:8px 2px">
+          <h3 id="modalTitle">Title</h3>
+          <p id="modalText" style="color:var(--muted); margin-top:12px"></p>
+          <div style="margin-top:18px">
+            <button class="pill" onclick="closeStory()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox modal -->
+  <div id="lightbox" class="modal" aria-hidden="true" onclick="closeLightbox()">
+    <div style="max-width:1100px;width:100%;height:80vh;display:flex;align-items:center;justify-content:center">
+      <img id="lightboxImg" src="" alt="expanded" style="max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 30px 80px rgba(2,6,23,0.5)" />
+    </div>
+  </div>
+
+  <script>
+    /* IntersectionObserver reveal */
+    const reveals = document.querySelectorAll('.reveal');
+    const ro = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('visible'); e.target.classList.remove('reveal'); }
+      });
+    }, {threshold: 0.12});
+    reveals.forEach(r=>ro.observe(r));
+
+    /* counters */
+    const counters = document.querySelectorAll('.count');
+    let countersRun = false;
+    function runCounters(){
+      if(countersRun) return;
+      counters.forEach(c=>{
+        const target = +c.getAttribute('data-target');
+        const duration = 1600;
+        const start = 0;
+        const startTime = performance.now();
+        function step(now){
+          const progress = Math.min((now - startTime)/duration, 1);
+          const eased = progress; // linear is fine
+          const value = Math.floor(eased * (target - start) + start);
+          c.textContent = value;
+          if(progress < 1) requestAnimationFrame(step);
+          else c.textContent = target.toLocaleString();
+        }
+        requestAnimationFrame(step);
+      });
+      countersRun = true;
+    }
+    // start counters when impact enters view
+    const impactSection = document.getElementById('impact');
+    if(impactSection){
+      const io2 = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) runCounters();
+        });
+      }, {threshold:0.2});
+      io2.observe(impactSection);
+    }
+
+    /* story modal content */
+    const stories = [
+      {
+        img: 'images/IMG_20210311_125804 (1).jpg',
+        title: 'Priya — Community Lead',
+        text: 'Joining the foundation changed my perspective on community service. The smiles on children’s faces made every effort worth it.'
+      },
+      {
+        img: 'images/IMG_20210311_122529.jpg',
+        title: 'Rahul — Volunteer',
+        text: 'I learned so much about teamwork, compassion, and resilience while volunteering here.'
+      },
+      {
+        img: 'images/IMG_20210311_125257_edited.jpg',
+        title: 'Sunita — Coordinator',
+        text: 'We focus on dignity while delivering essentials and providing consistent support.'
+      },
+      {
+        img: 'images/IMG_20220131_163957.jpg',
+        title: 'Ramesh — Logistics',
+        text: 'Logistics is challenging but seeing the community come together makes it meaningful.'
+      }
+    ];
+
+    function openStory(i){
+      const modal = document.getElementById('storyModal');
+      const img = document.getElementById('modalImg');
+      const title = document.getElementById('modalTitle');
+      const text = document.getElementById('modalText');
+      img.style.backgroundImage = `url('${stories[i].img}')`;
+      title.textContent = stories[i].title;
+      text.textContent = stories[i].text;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeStory(){
+      const modal = document.getElementById('storyModal');
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    /* lightbox */
+    function openLightbox(src){
+      document.getElementById('lightboxImg').src = src;
+      const lb = document.getElementById('lightbox');
+      lb.classList.add('show');
+      lb.setAttribute('aria-hidden','false');
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('show');
+      lb.setAttribute('aria-hidden','true');
+      document.getElementById('lightboxImg').src = '';
+    }
+
+    /* CTA actions placeholders */
+    function openDonatePrompt(){
+      alert('Thank you — to accept donations, integrate your payment gateway or add a donation link. For mock/demo we show instructions here.');
+    }
+    function donateKit(){
+      alert('Sponsor a ration kit: Example package -> ₹500. Integrate a payment endpoint or provide bank details to collect donations.');
+    }
+    function scrollToSection(id){
+      document.getElementById(id).scrollIntoView({behavior:'smooth'});
+    }
+    function volunteerForm(){
+      alert('Volunteer sign-up: please collect Name, Phone, Email, Area of interest. For demo, show a simple contact form or link to contact page.');
+    }
+
+    /* close modals with ESC */
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        closeStory(); closeLightbox();
+      }
+    });
+
+    /* accessibility: close story modal when clicking outside modal content */
+    document.getElementById('storyModal').addEventListener('click', function(e){
+      if(e.target === this) closeStory();
+    });
+    document.getElementById('lightbox').addEventListener('click', function(e){
+      if(e.target === this) closeLightbox();
+    });
+
+  </script>
+
+</body>
+</html>
